@@ -4,68 +4,68 @@
 [![Version](https://img.shields.io/badge/version-1.1.0-blue.svg?style=flat-square)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-> Extensão Chrome que impede o Instagram de pausar vídeos, Reels e Stories ao trocar de aba ou minimizar a janela.
+> Chrome extension that stops Instagram from pausing videos, Reels, and Stories when you switch tabs or minimize the window.
 
 ---
 
 ## Introduction
 
-O Instagram usa a **Page Visibility API** e eventos de foco (`visibilitychange`, `blur`, `pagehide`) para pausar mídia quando a aba deixa de estar visível. O **InstaKeepPlaying** injeta um script em `document_start` no **MAIN world**, fazendo a página achar que a aba está sempre visível.
+Instagram uses the **Page Visibility API** and focus events (`visibilitychange`, `blur`, `pagehide`) to pause media when the tab is no longer visible. **InstaKeepPlaying** injects a script at `document_start` in the **MAIN world**, so the page thinks the tab is always visible.
 
 ## Requirements
 
-- Google Chrome (ou Chromium) com suporte a Manifest V3
-- Conta no Instagram (web)
+- Google Chrome (or Chromium) with Manifest V3 support
+- An Instagram account (web)
 
 ## Installation
 
-### Modo desenvolvedor (pasta não empacotada)
+### Developer mode (unpacked folder)
 
-1. Clone ou baixe este repositório.
-2. Abra `chrome://extensions/` no Chrome.
-3. Ative **Modo do desenvolvedor** (canto superior direito).
-4. Clique em **Carregar sem compactação**.
-5. Selecione a pasta do projeto (`insta-keep-playing-extension`).
-6. Abra ou recarregue `https://www.instagram.com` e teste trocando de aba com um Reel/Story tocando.
+1. Clone or download this repository.
+2. Open `chrome://extensions/` in Chrome.
+3. Enable **Developer mode** (top right).
+4. Click **Load unpacked**.
+5. Select the project folder (`insta-keep-playing-extension`).
+6. Open or reload `https://www.instagram.com` and switch tabs while a Reel/Story is playing.
 
 ## Usage
 
-1. Clique no ícone da extensão para **ativar/desativar** (bolinha **verde** = ativo, **cinza** = desativado).
-2. Abra o Instagram, reproduza um vídeo/Reel/Story.
-3. Troque de aba ou minimize — com a opção ativa, a mídia continua tocando.
+1. Click the extension icon to **enable/disable** (green dot = on, gray = off).
+2. Open Instagram and play a video/Reel/Story.
+3. Switch tabs or minimize the window — with the option on, media keeps playing.
 
-Ao alternar, abas do Instagram são recarregadas para aplicar o estado. Escopo: `*://*.instagram.com/*`.
+Toggling reloads Instagram tabs so the new state applies. Scope: `*://*.instagram.com/*`.
 
 ## How It Works
 
-Em `document_start` (antes do JS do Instagram):
+At `document_start` (before Instagram's JS):
 
-1. `document.hidden` / `webkitHidden` → sempre `false`
-2. `document.visibilityState` → sempre `'visible'`
-3. Bloqueio de `visibilitychange`, `blur` e `pagehide` (fase de captura + `stopImmediatePropagation`)
+1. `document.hidden` / `webkitHidden` → always `false`
+2. `document.visibilityState` → always `'visible'`
+3. Blocks `visibilitychange`, `blur`, and `pagehide` (capture phase + `stopImmediatePropagation`)
 
-Arquivos principais:
+Main files:
 
-| Arquivo | Função |
-|---------|--------|
-| `manifest.json` | Manifest V3 e permissões |
-| `background.js` | Toggle no ícone + badge verde/cinza |
-| `content.js` | Injeta `inject.js` só se estiver ativo |
-| `inject.js` | Override da Visibility API e bloqueio de eventos |
+| File | Role |
+|------|------|
+| `manifest.json` | Manifest V3 and permissions |
+| `background.js` | Icon toggle + green/gray badge |
+| `content.js` | Injects `inject.js` only when enabled |
+| `inject.js` | Visibility API override and event blocking |
 
 ## Contributing
 
-PRs são bem-vindos. Mantenha o escopo só no Instagram e evite permissões desnecessárias.
+PRs are welcome. Keep the scope limited to Instagram and avoid extra permissions.
 
 ## Changelog
 
 ### 1.1.0
 
-- Clique no ícone para ativar/desativar
-- Badge verde/cinza no ícone indicando o estado
+- Click the icon to enable/disable
+- Green/gray badge on the icon showing the current state
 
 ### 1.0.0
 
-- Override da Page Visibility API
-- Bloqueio de `visibilitychange`, `blur` e `pagehide`
-- Injeção em MAIN world em `document_start`
+- Page Visibility API override
+- Blocks `visibilitychange`, `blur`, and `pagehide`
+- MAIN world injection at `document_start`
